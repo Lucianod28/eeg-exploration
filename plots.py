@@ -16,8 +16,8 @@ df = pd.read_csv('SubjectMichelle___timestamp_1501862371.27/SubjectMichelle__eeg
 # df2 = pd.read_csv('SubjectMichelle___timestamp_1501862954.25/SubjectMichelle__eeg.csv', header=8)
 # df3 = pd.read_csv('SubjectMichelle___timestamp_1501863670.92/SubjectMichelle__eeg.csv', header=8)
 # Create a list of all the left light trials, next I will include the other 2 recordings above
-lefts = [df.loc[(df['\t'] >= trials[0][0]) & (df['\t'] <= trials[0][1])]]
-for trial in trials[1:]:
+lefts = []
+for trial in trials:
 	lefts.append(df.loc[(df['\t'] >= trial[0]) & (df['\t'] <= trial[1])])
 trial1_left = lefts[0]
 plt.plot(trial1_left['\t'], trial1_left['\t[\'Fp1\''])
