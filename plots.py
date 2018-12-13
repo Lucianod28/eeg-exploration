@@ -16,7 +16,6 @@ df = pd.read_csv('SubjectMichelle___timestamp_1501862371.27/SubjectMichelle__eeg
 # df2 = pd.read_csv('SubjectMichelle___timestamp_1501862954.25/SubjectMichelle__eeg.csv', header=8)
 # df3 = pd.read_csv('SubjectMichelle___timestamp_1501863670.92/SubjectMichelle__eeg.csv', header=8)
 
-df['class'] = [0] * len(df.index)
 
 # Label left intervals with -1, right with 1, and rest with 0
 for trial in trials:
@@ -25,12 +24,24 @@ for trial in trials:
 	choices = [-1, 1]
 	df['class'] = np.select(conditions, choices, default=0)
 
+# MAKE A LIST OF INTERVALS
+# Create a list of all the left light trials, next I will include the other 2 recordings above
+lefts = [df.loc[(df['\t'] >= trials[0][0]) & (df['\t'] <= trials[0][1])]]
+for trial in trials[1:]:
+	lefts.append(df.loc[(df['\t'] >= trial[0]) & (df['\t'] <= trial[1])])
+
+left_df = pd.DataFrame()
+for left_interval in lefts:
+	length = len(left_interval)
+	left_df = left_df.append(left_interval.iloc[[length / 2]])
+print(left_df)
+
 # plt.plot(trial1_left['\t'], trial1_left['\t[\'Fp1\''])
 # plt.show()
 
 # Train an svm
 df.drop(['Channel Names'], 1, inplace=True) # drop first
-print(df.head())
+#print(df.head())
 exit(0)
 X = np.array(df.drop(['class'], 1))
 y = np.array(df['class'])
